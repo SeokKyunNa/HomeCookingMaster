@@ -23,8 +23,6 @@ services:
       # -v 옵션 (다렉토리 마운트 설정)
       - ./database/data:/var/lib/mysql
       - ./data:/app/data
-    networks:
-      - backnet
 
   backend:
     build:
@@ -40,9 +38,6 @@ services:
     #   - 5000:5000
     expose:
       - 5000
-    networks:
-      - backnet
-      - frontnet
     # depends_on:
     #   - HCMK-mysql
 
@@ -56,9 +51,3 @@ services:
       - 80:80
     volumes:
       - /home/ubuntu/ssl:/etc/nginx/certs
-    networks:
-      - frontnet
-
-networks:
-  backnet:
-  frontnet:
