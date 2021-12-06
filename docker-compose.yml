@@ -15,8 +15,9 @@ services:
     ports:
       - 5000:5000
     networks:
-      - backnet
-      - frontnet
+      - backend
+      # - backnet
+      # - frontnet
 
   proxy:
     build:
@@ -27,8 +28,11 @@ services:
     depends_on:
       - backend
     networks:
-      - frontnet
+      - backend
+      # - frontnet
 
 networks:
-  backnet:
-  frontnet:
+  backend:
+    driver: bridge
+  # backnet:
+  # frontnet:

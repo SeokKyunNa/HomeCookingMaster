@@ -40,4 +40,5 @@ ENV FLASK_ENV production
 
 
 # gunicorn 실행
-CMD ["gunicorn", "delivery_app.app:application", "-b", "0.0.0.0:5000", "--workers=4", "--threads=4"]
+CMD ["gunicorn", "hcmk_server.app:application", "-b", "0.0.0.0:5000"]
+# , "--workers=4", "--threads=4"]
