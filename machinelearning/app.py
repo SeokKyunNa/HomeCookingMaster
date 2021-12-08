@@ -30,7 +30,7 @@ def home():
 @app.route('/receive', methods=['GET', 'POST'])
 def receive():
     if request.method == 'POST':
-
+        
         f = request.files["img"]
 
         s_filename = secure_filename(f.filename) # 파일명 저장

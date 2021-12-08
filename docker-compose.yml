@@ -20,7 +20,8 @@ services:
     environment:
       - NVIDIA_VISIBLE_DEVICES=0
     ports:
-      - 8000:8000
+      - 5000:5000
+    restart: always
   #   networks:
   #     - backnet
 
@@ -31,4 +32,4 @@ services:
     ports:
       - 80:80
     depends_on:
-      - backend
+      - machinelearning
