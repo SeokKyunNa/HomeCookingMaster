@@ -5,6 +5,7 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+    restart: always
     volumes:
       - ./server:/server
     ports:
@@ -14,6 +15,7 @@ services:
     build:
       context: ./machinelearning
       dockerfile: Dockerfile
+    restart: always
     volumes:
       - ./machinelearning:/opt/server
     runtime: nvidia

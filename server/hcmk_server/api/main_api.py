@@ -57,7 +57,7 @@ class TodayRanking(Resource):
         return result
 
 
-@main_ns.route('/test')
+@main_ns.route('/search/img')
 @main_ns.response(200, "success")
 @main_ns.response(500, "Failed")
 class test(Resource):

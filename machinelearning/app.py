@@ -39,7 +39,8 @@ def receive():
  
         # upload = {'img': open(file_dir, 'rb') } # 업로드하기위한 파일
 
-        food = FoodClassification(model)
+        # food = FoodClassification(model)
+        food = FoodClassification()
 
 
         # 어떤 형태로 프론트에서 받을건지 정해야 함
@@ -53,11 +54,16 @@ def receive():
         # 모델 불러오기
         # global model
         
+        # rembg 처리
+        rembg_img = food.img_rembg(image_array)
+
         # 전처리
         processed_img = food.preprocessing(image_array)
+        # processed_img = food.preprocessing(rembg_img)
         
         # 예측
-        recipe_class = food.predict(processed_img)
+        recipe_class = food.predict(model, processed_img)
+        # recipe_class = {'test': 123}
         json_recipe_class = json.dumps(recipe_class)
 
 

@@ -21,6 +21,7 @@ WORKDIR /opt/server
 COPY requirements.txt .
 
 # 파이썬 패키지 설정
+RUN pip3 uninstall -y numpy
 RUN pip3 install -r requirements.txt
 
 # ENV FLASK_APP app
