@@ -1,14 +1,14 @@
 version: '3'
 
 services:
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    volumes:
-      - ./server:/server
-    ports:
-      - 5000:5000
+  # backend:
+  #   build:
+  #     context: ./server
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./server:/server
+  #   ports:
+  #     - 5000:5000
 
   machinelearning:
     build:
@@ -32,4 +32,3 @@ services:
       - 80:80
     depends_on:
       - backend
-
