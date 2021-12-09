@@ -1,5 +1,5 @@
-from hcmk_server.models.post import Post, db
-from hcmk_server.models.user import User
+from hcmk_server.models.post import Post
+from hcmk_server.models.user import User, db
 from hcmk_server.models.recipe import Recipe
 from hcmk_server.models.recipe_like import RecipeLike
 from flask_jwt_extended import get_jwt_identity, get_jwt
@@ -58,6 +58,15 @@ def edit_img(user_id, img):
     user = User.query.filter(User.id == user_id).first()
     
     try:
+        if img == user.img:
+            return {
+            "result" : "failed",
+            "message" : "프로필 사진을 수정되지 않았습니다.",
+            "data": 
+            {
+                "img": user.img
+            }
+        }, 200
         if img.filename == "":
             return {
             "result" : "failed",

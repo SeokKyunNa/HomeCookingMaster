@@ -154,6 +154,11 @@ class AddLike(Resource):
     def post(self, recipe_id):
         """해당 레시피의 좋아요를 관리하는 api"""
         user_id = request.json.get("user_id")
+        if user_id == None:
+            return {
+                "result" : "failed",
+                "message" : "로그인 후 이용 해주세요."
+            }
         result = check_likes(recipe_id, user_id)
         return result
 
@@ -192,6 +197,11 @@ class AddPost(Resource):
     def post(self, recipe_id):
         """해당 댓글을 저장하고 댓글 리스트를 반환하는 api"""
         user_id = request.form.get("user_id")
+        if user_id == None:
+            return {
+                "result" : "failed",
+                "message" : "로그인 후 이용 해주세요."
+            }
         post = request.form.get("post")
         try:
             img = request.files["img"]

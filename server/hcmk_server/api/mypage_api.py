@@ -1,6 +1,11 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
 from flask_jwt_extended import jwt_required
+from hcmk_server.models.user import User, db
+from hcmk_server.services.s3 import (
+    boto3_image_upload,
+    default_profile_img,
+)
 from hcmk_server.services.mypage import (
     get_mypage,
     edit_img
@@ -93,9 +98,17 @@ class EditImg(Resource):
     def post(self):
         """해당 레시피의 좋아요를 관리하는 api"""
         user_id = request.form.get("user_id")
+        user = User.query.filter(User.id == user_id).first()
         try:
             img = request.files["img"]
         except Exception:
-            img = None
+            pass
+        try:
+            if img.filename == "":
+                image_url = user.img
+            else:
+                image_url = boto3_image_upload(img)
+        except UnboundLocalError:
+            image_url = user.img
         result = edit_img(user_id, img)
         return result
