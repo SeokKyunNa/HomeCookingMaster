@@ -54,30 +54,10 @@ def get_mypage ():
     }, 200
 
 
-def edit_img(user_id, img):
+def edit_img(user_id, image_url):
     user = User.query.filter(User.id == user_id).first()
     
-    try:
-        if img == user.img:
-            return {
-            "result" : "failed",
-            "message" : "프로필 사진을 수정되지 않았습니다.",
-            "data": 
-            {
-                "img": user.img
-            }
-        }, 200
-        if img.filename == "":
-            return {
-            "result" : "failed",
-            "message" : "프로필 사진을 수정되지 않았습니다.",
-            "data": 
-            {
-                "img": user.img
-            }
-        }, 200
-        image_url = boto3_image_upload(img)
-    except UnboundLocalError:
+    if image_url == user.img:
         return {
         "result" : "failed",
         "message" : "프로필 사진을 수정되지 않았습니다.",
