@@ -1,17 +1,13 @@
-from flask_restx import Resource, Namespace, fields, reqparse
-from flask import request, jsonify
+from flask_restx import Resource, Namespace
+from flask import request
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import jwt_required
+
 from hcmk_server.services.s3 import (
     boto3_image_upload,
     default_profile_img
 )
 from hcmk_server.services.auth import (
-    db,
-    insert_user,
-    get_user_by_email,
-    get_user_by_id,
-    get_user_by_nickname,
-    validate_token,
     login,
     logout,
     refresh,
@@ -20,53 +16,39 @@ from hcmk_server.services.auth import (
     val_nickname
 )
 
-from flask_jwt_extended import (
-    create_access_token,
-    create_refresh_token,
-    get_jwt_identity,
-    jwt_required,
-    get_jwt,
-    decode_token,
+from hcmk_server.swagger.auth.signup import (
+    signin_fields,
+    signin_expect_fields,
 )
-from flask_jwt_extended.utils import decode_token
-
-bcrypt = Bcrypt()
+from hcmk_server.swagger.auth.validate_email import (
+    val_email_fields,
+    val_email_expect_fields,
+)
+from hcmk_server.swagger.auth.validate_email import (
+    login_fields,
+    login_expect_fields,
+)
+from hcmk_server.swagger.auth.validate_email import (
+    refresh_fields,
+    refresh_expect_fields,
+)
+from hcmk_server.swagger.auth.validate_nickname import (
+    val_nickname_fields,
+    val_nickname_expect_fields,
+)
+from hcmk_server.swagger.auth.validate_nickname import (
+    logout_fields,
+)
 
 auth_ns = Namespace(
     name="auth",
     description="회원정보를 관리하는 API.",
 )
+bcrypt = Bcrypt()
 
 '''
 회원가입 API
 '''
-
-signin_data_fields = auth_ns.model(
-    "signin_data",
-    {   
-        "user_id" : fields.Integer,
-        "nickname" : fields.String,
-    }
-)
-
-signin_fields = auth_ns.model(
-    "signin",
-    {   
-        "result" : fields.String,
-        "message" : fields.String,
-        "data": fields.Nested(signin_data_fields)
-    }
-)
-
-signin_expect_fields = auth_ns.model(
-    "signin_expect",
-    {   
-        "email" : fields.String,
-        "password" : fields.String,
-        "nickname" : fields.String,
-    }
-)
-
 @auth_ns.route("/signup")
 @auth_ns.response(200, "success")
 @auth_ns.response(500, "Failed registration")
@@ -99,22 +81,6 @@ class Signup(Resource):
 '''
 이메일 중복 확인 API
 '''
-
-val_email_fields = auth_ns.model(
-    "validate_email",
-    {
-        "is_valid": fields.Boolean,
-        "message": fields.String,
-    }
-)
-
-val_email_expect_fields = auth_ns.model(
-    "validate_email_expect",
-    {
-        "email": fields.String,
-    }
-)
-
 @auth_ns.route("/signup/val_email")
 @auth_ns.response(200, "success")
 class ValidateEmail(Resource):
@@ -130,21 +96,6 @@ class ValidateEmail(Resource):
 '''
 닉네임 중복 확인 API
 '''
-
-val_nickname_fields = auth_ns.model(
-    "validate_nickname",
-    {
-        "is_valid": fields.Boolean,
-        "message": fields.String,
-    }
-)
-
-val_nickname_expect_fields = auth_ns.model(
-    "validate_nickname_expect",
-    {
-        "nickname": fields.String,
-    }
-)
 
 @auth_ns.route("/signup/val_nickname")
 @auth_ns.response(200, "success")
@@ -162,35 +113,6 @@ class ValidateEmail(Resource):
 '''
 로그인 API
 '''
-
-login_data_fields = auth_ns.model(
-    "data",
-    {
-        "access_token" : fields.String,
-        "refresh_token" : fields.String,
-        "user_id" : fields.Integer,
-        "nickname" : fields.String,
-        "img" : fields.String,
-    }
-)
-
-login_fields = auth_ns.model(
-    "login",
-    {
-        "result": fields.String,
-        "message": fields.String,
-        "data": fields.Nested(login_data_fields),
-    }
-)
-
-login_expect_fields = auth_ns.model(
-    "login_expect",
-    {
-        "email": fields.String,
-        "password": fields.String,
-    }
-)
-
 @auth_ns.route("/login")
 @auth_ns.response(200, "success")
 class Login(Resource):
@@ -204,15 +126,6 @@ class Login(Resource):
         result = login(email, password)
         return result
 
-
-logout_fields = auth_ns.model(
-    "logout",
-    {
-        "result": fields.String,
-        "message": fields.String,
-    }
-)
-
 @auth_ns.route("/logout")
 @auth_ns.response(200, "success")
 class Logout(Resource):
@@ -222,39 +135,6 @@ class Logout(Resource):
         """토큰을 확인하고 로그아웃 시킵니다."""
         result = logout()
         return result
-
-
-
-refresh_data_fields = auth_ns.model(
-    "data",
-    {
-        "access_token" : fields.String,
-    }
-)
-
-refresh_fields = auth_ns.model(
-    "refresh",
-    {
-        "result": fields.String,
-        "message": fields.String,
-        "data": fields.Nested(refresh_data_fields),
-    }
-)
-
-refresh_expect_fields = auth_ns.model(
-    "refresh_expect",
-    {
-        "email": fields.String,
-        "password": fields.String,
-    }
-)
-
-refresh_expect_fields = auth_ns.model(
-    "refresh_expect",
-    {
-        "refresh_token": fields.String,
-    }
-)
 
 @auth_ns.route("/refresh")
 @auth_ns.response(200, "success")

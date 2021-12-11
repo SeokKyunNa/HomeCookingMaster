@@ -112,7 +112,7 @@ def edit_like(recipe_id, toggle):
         db.session.rollback()
         raise
 
-def check_likes(recipe_id, user_id):
+def check_like(recipe_id, user_id):
     try:
         data = RecipeLike.query.filter((RecipeLike.recipe_id == recipe_id) & (RecipeLike.user_id == user_id)).first()
         

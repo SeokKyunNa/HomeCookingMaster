@@ -1,9 +1,16 @@
 from flask import request
-from flask_restx import Resource, Namespace, fields
+from flask_restx import Resource, Namespace
 from flask_jwt_extended import jwt_required
 from hcmk_server.services.mypage import (
     get_mypage,
     edit_img
+)
+from hcmk_server.swagger.mypage.edit_img import (
+    mypage_fields,
+)
+from hcmk_server.swagger.mypage.mypage import (
+    edit_img_fields,
+    edit_img_expect_fields,
 )
 
 mypage_ns = Namespace(
@@ -11,43 +18,6 @@ mypage_ns = Namespace(
     description="마이페이지 관련 API.",
 )
 
-recipe_fields = mypage_ns.model(
-    "my_page_liked_recipe",
-    {
-        "recipe_id": fields.Integer,
-        "recipe_name": fields.String,
-        "recipe_img" : fields.String,
-    }
-)
-
-user_info_fields = mypage_ns.model(
-    "my_page_user_info",
-    {
-        "email": fields.String,
-        "nickname": fields.String,
-        "img": fields.String,
-        "intro": fields.String,
-        "exp": fields.String,
-    }
-)
-
-mypage_data_fields = mypage_ns.model(
-    "mypage_data",
-    {
-        "user_info": fields.Nested(user_info_fields),
-        "liked_recipe": fields.List(fields.Nested(recipe_fields)),
-        "my_post": fields.List(fields.Nested(recipe_fields)),
-    }
-)
-
-mypage_fields = mypage_ns.model(
-    "mypage",
-    {
-        "result": fields.String,
-        "message": fields.String,
-        "data": fields.Nested(mypage_data_fields)
-    }
-)
 @mypage_ns.route('')
 @mypage_ns.response(200, "Success")
 @mypage_ns.response(401, "Fail")
@@ -60,29 +30,6 @@ class Mypage(Resource):
         result = get_mypage()
         return result
 
-'''EditImg Models'''
-edit_img_data_fields = mypage_ns.model(
-    "edit_img_data",
-    {
-        "img": fields.String,
-    }
-)
-
-edit_img_fields = mypage_ns.model(
-    "edit_img",
-    {
-        "result": fields.String,
-        "message": fields.String,
-        "data": fields.Nested(edit_img_data_fields)
-    }
-)
-
-edit_img_expect_fields = mypage_ns.model(
-    "edit_img_expect",
-    {
-        "user_id": fields.Integer,
-    }
-)
 
 @mypage_ns.route('/editimg')
 @mypage_ns.response(200, "success")
@@ -91,7 +38,7 @@ class EditImg(Resource):
     @mypage_ns.expect(edit_img_expect_fields)
     @mypage_ns.marshal_with(edit_img_fields)
     def post(self):
-        """해당 레시피의 좋아요를 관리하는 api"""
+        """사용자의 프로필 사진을 수정하는 api"""
         user_id = request.form.get("user_id")
         try:
             img = request.files["img"]
