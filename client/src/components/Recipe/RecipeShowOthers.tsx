@@ -5,7 +5,6 @@ import { useDispatch, useSelector, RootStateOrAny } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRecipe, clearRecipe } from "../../modules/recipeSlice";
 import { Box, Typography, Divider, ImageList, ImageListItem, ImageListItemBar, IconButton } from "@mui/material";
-
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
@@ -14,13 +13,14 @@ function RecipeShowOthers(props: any) {
     const params = useParams();
     const dispatch = useDispatch();
     
-    const other_recipes_info = props.recipe.other_recipes_info;
+    const { other_recipes_info } = props.recipe;
     const recipe_id = Number(params.id);
     const user_info = useSelector((state: RootStateOrAny) => state.getUserInfo);
     const { user_id } = user_info;
 
     useEffect(() => {
         dispatch(getRecipe({ recipe_id, user_id }));
+        
         return () => {
             dispatch(clearRecipe());
         };

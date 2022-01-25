@@ -16,7 +16,6 @@ export const userSearchImg = createSlice({
     reducers: {
         setSearchImg(state, action: PayloadAction<Boolean>) {
             state.searchImg = action.payload;
-            // console.log('<setSearchImg> state.status : ',  state.searchImg)
         },
     },
 });

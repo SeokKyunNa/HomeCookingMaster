@@ -1,9 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { useState, useRef, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { terms, terms_cnt, terms_title, service_title, service_sub_title, all_agree,btn, agree_btn, select_cnt } from "../../css/register_css";
-import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
+import { 
+    terms, 
+    terms_cnt, 
+    terms_title, 
+    service_title, 
+    service_sub_title, 
+    all_agree,btn, 
+    agree_btn, 
+    select_cnt, 
+} from "../../css/register_css";
+import { Checkbox, Button } from "@mui/material";
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';

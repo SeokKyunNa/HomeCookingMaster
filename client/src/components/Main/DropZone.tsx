@@ -1,51 +1,40 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector, RootStateOrAny } from "react-redux";
 import Dropzone from "react-dropzone";
 import { Box, Typography } from "@mui/material";
-import { useDispatch, useSelector,RootStateOrAny } from "react-redux";
-import { getImgResult, setImgResult } from "../../modules/searchByImageSlice";
-// import { setStatus } from "../../modules/checkImg";
+import { getImgResult } from "../../modules/searchByImageSlice";
 import { setSearchImg } from "../../modules/userSearchImg";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { GrImage } from "react-icons/gr";
-import { btnDiv } from "../../css/main_css";
-import { useNavigate } from "react-router";
-// import { setImageFile,setPreviewUrl } from "../Result/searchedImageSlice";
 
 function DropZone() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     dispatch(getImgResult([]));
-    // }, []);
-
     const handleDrop = (acceptedFiles: any) => {
-
-        // let reader = new FileReader();
-        // let file = acceptedFiles[0];
-        // const tmp = reader.readAsDataURL(file);
-
-        // reader.onload = (e: any) => {
-        //     dispatch(setImageFile(file));
-        //     // dispatch(setPreviewUrl(tmp));
-        // }
-
-        // console.log('file', acceptedFiles[0])
         const formData = new FormData();
         formData.append("img", acceptedFiles[0]);
-        dispatch(getImgResult(formData));       // 이미지 검색 결과
-        dispatch(setSearchImg(acceptedFiles[0]));           // 검색한 이미지
+
+        /**
+         * 업로드한 이미지파일을 formData에 넣고
+         * searchByImageSlice에서 post 요청을 보냄
+         */
+        dispatch(getImgResult(formData));
+        
+        /** 업로드한 이미지파일을 검색결과 페이지에서 보여주기 위해
+         * userSearchImg로 보냄
+         */
+        dispatch(setSearchImg(acceptedFiles[0]));
     };
     
     const imgResult = useSelector((state:RootStateOrAny) => state.getResultByImg.list)
-    // console.log('pleleeeaassseee ---- imgResult', imgResult)
 
     useEffect(() => {
         if (imgResult) {
             const rateResult = imgResult["equal_rate"];
-            // console.log("<imgResult> : imgResult true", rateResult)
+            
             if (
                 typeof rateResult == "undefined" ||
                 rateResult == null ||
@@ -55,10 +44,8 @@ function DropZone() {
             } else {
                 if (rateResult[0]["rate"] > 0.7) {
                     const result = rateResult[0]["name"];
-                    // console.log('<imgResult> : name 처리',result)
                     navigate(`/result?data=${result}`);
                 } else {
-                    // console.log('<imgResult> : 값 < 0.7')
                     navigate("/result");
                 }
             }

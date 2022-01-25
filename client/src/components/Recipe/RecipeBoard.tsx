@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import { Box, TextField, Button, IconButton } from "@mui/material";
+import { 
+    Box, 
+    TextField, 
+    Button, 
+    IconButton,
+} from "@mui/material";
 import AddAPhotoRoundedIcon from "@mui/icons-material/AddAPhotoRounded";
 import { recipeReview } from "../../modules/recipeReviewSlice";
 import { getRecipe } from "../../modules/recipeSlice";
@@ -73,12 +78,11 @@ const disabledButtonStyles = {
 
 function RecipeBoard(props: any) {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const params = useParams();
     const [post, setPost] = useState<string>("");    
 
     const recipe_id = props.recipe_id;
-    const user_id = String(sessionStorage.getItem("user_id")); // user_id
+    const user_id = String(sessionStorage.getItem("user_id"));
     const [imageFile, setImageFile] = useState<any>(null);
 
     const handleText = (e: any) => {
@@ -93,6 +97,10 @@ function RecipeBoard(props: any) {
         setPost("");
     }, [params]);
 
+    /**
+     * 리뷰 작성시 이미지파일 (선택), 리뷰내용, user_id를
+     * formData에 담아 recipeReviewSlice로 보내고 post 요청을 보냄
+     */
     const handleSubmit = async () => {
         const formDataPost = new FormData();
         formDataPost.append("img", imageFile);
@@ -116,7 +124,7 @@ function RecipeBoard(props: any) {
                     height: "30px",
                 }}
             />
-            {user_id != "null" ? (
+            {user_id !== "null" ? (
                 <TextField
                     variant="outlined"
                     sx={inputStyles}
@@ -148,7 +156,7 @@ function RecipeBoard(props: any) {
                 style={{ width: "70%", marginLeft: "15%", textAlign: "right" }}
             >
                 <label htmlFor="icon-button-file">
-                    {user_id != "null" ? (
+                    {user_id !== "null" ? (
                         <>
                             <input
                                 accept="image/*"
@@ -177,7 +185,7 @@ function RecipeBoard(props: any) {
                         </>
                     )}
                 </label>
-                {user_id != "null" ? (
+                {user_id !== "null" ? (
                     <Button
                         variant="contained"
                         sx={buttonStyles}

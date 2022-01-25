@@ -189,7 +189,7 @@ Row.propTypes = {
 };
 
 function ReviewList(props: any) {
-    const post = props.post;
+    const { post } = props;
 
     return (
         <>

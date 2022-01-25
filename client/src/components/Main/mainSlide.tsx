@@ -1,14 +1,12 @@
 /** @jsxImportSource @emotion/react */
+import { Carousel, Image } from "react-bootstrap";
+import { styled } from '@mui/material/styles';
+import Button from "@restart/ui/esm/Button";
 import main1 from "../../assets/main1.png";
 import main2 from "../../assets/main2.jpg";
 import main3 from "../../assets/main3.png";
 import main4 from "../../assets/main4.jpg";
-import logo from "../../assets/loogo.png";
-import kkokko from "../../assets/kkokko.png";
 import finalLogo from "../../assets/finalLogo.png";
-import { Carousel, Image } from "react-bootstrap";
-import Button from "@restart/ui/esm/Button";
-import { styled } from '@mui/material/styles';
 
 function MainSlide() {
     return (

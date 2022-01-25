@@ -4,17 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector, RootStateOrAny } from "react-redux";
 import { getMyInfo } from "../../modules/myInfo";
 import { getNewAccess } from "../../modules/newToken";
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { IconButton } from "@mui/material";
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import { editImg } from "../../modules/mypageEditImgSlice";
-import Modal from '@mui/material/Modal';
-// import { profile_img, option_box, file_select } from "../../css/register_css";
-
-// import {avatar} from '../../assets/mainAvatar.png'
+import {
+    Avatar,
+    Typography,
+    Button,
+    IconButton,
+    Box,
+    Modal,
+} from "@mui/material";
+import { styled } from '@mui/material/styles';
 
 const Input = styled("input")({
     display: "none",
@@ -35,7 +34,6 @@ function IntroMe() {
     );
 
     useEffect(() => {
-        // console.log("<IntroMe> : dispatch > getMyInfo");
         dispatch(getMyInfo());
     }, [dispatch]);
 
@@ -43,42 +41,36 @@ function IntroMe() {
         (state: RootStateOrAny) => state.getMyInfoList.list
     );
 
-    // const user_info = useSelector((state: RootStateOrAny) => state.getUserInfo);
-
     useEffect(() => {
-        // console.log("<IntroMe> : myInfo : ", myInfo);
         if (Array.isArray(myInfo) && myInfo.length === 0) {
             // console.log("<IntroMe> : myInfo empty");
         } else if (!myInfo) {
-            // console.log("<IntroMe> : myInfo false");
             dispatch(
                 getNewAccess({
                     refresh_token: refreshTkn,
                 })
             );
         } else {
-            // console.log("<IntroMe> : myInfo true ", myInfo.data.user_info);
             setIsInfo(true);
         }
     }, [dispatch, myInfo, refreshTkn]);
 
     useEffect(() => {
-        // console.log("<newToken> : ", newToken);
         if (Array.isArray(newToken) && newToken.length === 0) {
             // console.log("<newToken> : token empty");
         } else if (!newToken) {
             // console.log("<newToken> : token false");
         } else {
-            // console.log("<newToken> : token true ", newToken.data);
             sessionStorage.removeItem("usrAcsTkn");
             sessionStorage.setItem("usrAcsTkn", newToken.data["access_token"]);
-            // console.log("<newToken> : dispatch > again");
             dispatch(getMyInfo());
         }
     }, [dispatch, newToken]);
 
-    // 프로필 사진 수정 api
-    // 프로필 수정 버튼 - 모달
+    /**
+     * 프로필 사진 수정 api
+     * 프로필 수정 버튼 - 모달
+     */
     const modifyImg = () => {
         handleOpen1();
     };
@@ -106,7 +98,6 @@ function IntroMe() {
                         component="div"
                         sx={{
                             display: "flex",
-                            // justifyContent: 'center',
                             flexDirection: "row",
                             marginLeft: "15%",
                         }}
@@ -140,14 +131,6 @@ function IntroMe() {
                                 >
                                     {myInfo.data.user_info.nickname}
                                 </Typography>
-                                {/* <Typography
-                                    variant="subtitle1"
-                                    gutterBottom
-                                    component="div"
-                                    sx={{ pl: 4, pb: 1 }}
-                                >
-                                    Lv. {myInfo.data.user_info.exp}
-                                </Typography> */}
                             </Box>
                             <Box
                                 component="div"

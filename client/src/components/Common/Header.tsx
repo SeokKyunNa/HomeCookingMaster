@@ -1,33 +1,30 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import ScrollTop from "./ScrollTop";
 import HideOnScroll from "./HideOnScroll";
-// import mainlogo from "../../assets/hcmk_logo.png";
-// import logo1line from "../../assets/logo22.png";
-import logohat from "../../assets/hatYess.png";
-// import logonohat from "../../assets/hatNoo.png";
-import axios from "axios";
-import CssBaseline from "@mui/material/CssBaseline";
-import { useNavigate } from "react-router-dom";
 import { setUser } from "../../modules/userLogin";
-
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    IconButton,
+    Typography,
+    Menu,
+    Container,
+    Avatar,
+    Tooltip,
+    MenuItem,
+    Fab,
+    CssBaseline
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import background from "../../assets/bg2.jpeg";
 import finalLogo from "../../assets/finalLogo.png";
+import logohat from "../../assets/hatYess.png";
 
 const styles = {
     "&.MuiFab-secondary": {
@@ -64,15 +61,18 @@ interface Props {
 const Header = (props: Props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const user_info = useSelector((state: RootStateOrAny) => state.getUserInfo);
-
     const [logCheck, setLogCheck] = useState<boolean>(false);
+    const refreshTkn = sessionStorage.getItem("usrRfshTkn");
+    const accessTkn = sessionStorage.getItem("usrAcsTkn");
+    const nickname = sessionStorage.getItem("nickname");
+    const user_img = sessionStorage.getItem("img");
 
-    const refreshTkn = sessionStorage.getItem("usrRfshTkn"); // refresh_token
-    const accessTkn = sessionStorage.getItem("usrAcsTkn"); // access_token
-    const nickname = sessionStorage.getItem("nickname"); // nickname
-    const user_img = sessionStorage.getItem("img"); // nickname
-
+    /**
+     * 로그인했을 때와 하지 않았을 때에
+     * 보여주는 헤더바가 다르기 때문에
+     * 세션스토리지에 리프레쉬 토큰이 저장돼있는지를 통해
+     * 로그인 여부를 판별한다
+     */ 
     useEffect(() => {
         if (refreshTkn) {
             setLogCheck(true);
@@ -83,18 +83,15 @@ const Header = (props: Props) => {
     }, [refreshTkn]);
 
     const handleLogout = async () => {
-        // const res = await axios.delete("/api/auth/logout", {
         await axios.delete("/api/auth/logout", {
             headers: {
                 Authorization: "Bearer " + accessTkn,
             },
         });
-        // console.log("<Header>: logout delete api response", res);
     };
 
     const handleLog = () => {
         handleLogout();
-        // console.log("<Header> : logout");
         sessionStorage.clear();
         dispatch(setUser());
         navigate("/");
@@ -243,15 +240,6 @@ const Header = (props: Props) => {
                                 }}
                             >
                                 {pages.map((item, index) => (
-                                    // <Button
-                                    //     key={index}
-                                    //     onClick={handleCloseNavMenu}
-                                    //     sx={{
-                                    //         my: 2,
-                                    //         color: "#897A5F",
-                                    //         display: "block",
-                                    //     }}
-                                    // >
                                     <MenuItem
                                         key={index}
                                         onClick={() => {
@@ -267,19 +255,12 @@ const Header = (props: Props) => {
                                                 fontFamily: "EliceBold",
                                                 fontWeight: "800",
                                             }}
-                                            // sx={{
-                                            //     my: 2,
-                                            //     color: "#897A5F",
-                                            //     display: "block",
-                                            // }}
                                         >
                                             {item.text}
                                         </Typography>
                                     </MenuItem>
-                                    // </Button>
                                 ))}
                             </Box>
-
                             {logCheck ? (
                                 <>
                                     <Box sx={{ marginRight: "20px" }}>

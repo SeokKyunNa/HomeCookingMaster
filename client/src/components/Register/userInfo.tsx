@@ -1,17 +1,30 @@
 /** @jsxImportSource @emotion/react */
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
-import { userInfo, terms_title, input_box, check_box, profile_img, option_box, file_select, option_sub_title, rebtn } from "../../css/register_css";
 import { useDispatch } from "react-redux";
-import { sendRegister } from "../../modules/registerInfoSlice";
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
+import { useNavigate } from "react-router";
 import axios from "axios";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import { 
+    userInfo, 
+    terms_title, 
+    input_box, 
+    check_box, 
+    profile_img, 
+    option_box, 
+    file_select, 
+    option_sub_title, 
+    rebtn, 
+} from "../../css/register_css";
+import {
+    TextField,
+    Button,
+    Avatar,
+    Box,
+    Typography,
+    Modal,
+} from "@mui/material";
+import { sendRegister } from "../../modules/registerInfoSlice";
 import { styled } from '@mui/material/styles';
+
 
 function UserInfo() {
     const [email, setEmail] = useState<string>("");
@@ -21,16 +34,14 @@ function UserInfo() {
         String | ArrayBuffer | null
     >("");
     
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // ====================================================================
     // 유효성검사
-    const [emailVal, setEmailVal] = useState<boolean>(false); // 이메일 유효성 여부
-    const [pwVal, setPwVal] = useState<boolean>(false); // 비밀번호 유효성 여부
-    const [pwCheck, setPwCheck] = useState<boolean>(true); // 비밀번호 일치 여부
-    const [nicknameVal, setNicknameVal] = useState<boolean>(false); // 닉네임 유효성 여부
+    const [emailVal, setEmailVal] = useState<boolean>(false);
+    const [pwVal, setPwVal] = useState<boolean>(false);
+    const [pwCheck, setPwCheck] = useState<boolean>(true);
+    const [nicknameVal, setNicknameVal] = useState<boolean>(false);
 
     useEffect(() => {
         const emailForm =
@@ -80,7 +91,6 @@ function UserInfo() {
         }
     };
 
-    // ====================================================================
     // 중복확인
     const [ableEmail, setAbleEmail] = useState<boolean>(false);
     const confirmEmail = async () => {
@@ -99,7 +109,6 @@ function UserInfo() {
         handleOpen2();
     };
 
-    // ====================================================================
     // 회원가입 완료 버튼 활성화 처리(정보 입력 완료 여부 확인)
     const [ableSignUp, setAbleSignUp] = useState<boolean>(false);
 
@@ -109,7 +118,6 @@ function UserInfo() {
         }
     }, [ableEmail, pwVal, pwCheck, ableName]);
 
-    // ====================================================================
     // 중복확인 modal
     const [open1, setOpen1] = useState(false);
     const handleOpen1 = () => setOpen1(true);
@@ -119,7 +127,6 @@ function UserInfo() {
     const handleOpen2 = () => setOpen2(true);
     const handleClose2 = () => setOpen2(false);
 
-    // ====================================================================
     // 프로필 사진
     const [imageFile, setImageFile] = useState<any>(null);
 
@@ -145,7 +152,7 @@ function UserInfo() {
         console.log("after", imageFile);
 
         dispatch(sendRegister(formDataRegister));
-        navigate("/register/complete"); // 회원가입 완료시 닉네임값 전달
+        navigate("/register/complete");
     };
 
     return (
